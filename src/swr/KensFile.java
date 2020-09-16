@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class KensFile {
-	private static final String FILENAME="F-F_Research_Data_Factors.CSV";
+	private static final String FILENAME="F-F_Research_Data_Factors-without30s.CSV";
 	
 	public static List<Record> load(){
 		List<Record> res = new ArrayList<>();

@@ -2,11 +2,11 @@ package swr;
 
 public class Record {
 	
-	String month;
-	float marketBeta;
-	float smallMinusBig;
-	float valueMinusGrowth;
-	float riskFree;
+	private String month;
+	private float marketBeta;
+	private float smallMinusBig;
+	private float valueMinusGrowth;
+	private float riskFree;
 	
 	public float getRiskFree() {
 		return riskFree;
@@ -14,7 +14,7 @@ public class Record {
 	public void setRiskFree(float riskFree) {
 		this.riskFree = riskFree;
 	}
-	public String getMois() {
+	public String getMonth() {
 		return month;
 	}
 	public void setMois(String mois) {
