@@ -68,7 +68,7 @@ public class Scenario {
 		DecimalFormat decimalFormat = (DecimalFormat) NumberFormat.getNumberInstance(locale);
 		decimalFormat.applyPattern(pattern);
 		
-		return "Triple [swr=" + decimalFormat.format(swr) + "%, maxDrawdown=" + decimalFormat.format(maxDrawdown*100) + "%, monthEndOfMaxDrawdown="
+		return "Scenario [swr=" + decimalFormat.format(swr) + "%, maxDrawdown=" + decimalFormat.format(maxDrawdown*100) + "%, monthEndOfMaxDrawdown="
 				+ monthEndOfMaxDrawdown + ", monthStartOfMaxDrawdown=" + monthStartOfMaxDrawdown
 				+ ", monthStartOfRetirement=" + monthStartOfRetirement + "]";
 	}
