@@ -49,17 +49,17 @@ public class Main {
 //			}
 //			
 //			System.out.println();
-//		for(int marketBeta=0; marketBeta<=100; marketBeta+=10) {
-//			for(int smallMinusBig=0; smallMinusBig<=150; smallMinusBig+=5) {
-//				for(int valueMinusGrowth=0; valueMinusGrowth<=150; valueMinusGrowth+=5) {
-//					Scenario swr = computeSWR(marketBeta,smallMinusBig,valueMinusGrowth);
-//					if(swr!=null && swr.getSwr()>5.9) {
-//						//displays all High SWRs it finds
-//						System.out.println(swr+ ", beta:"+marketBeta+", SMB:"+smallMinusBig+", HML:"+valueMinusGrowth);
-//					}
-//				}
-//			}
-//		}
+		for(int marketBeta=0; marketBeta<=100; marketBeta+=10) {
+			for(int smallMinusBig=0; smallMinusBig<=200; smallMinusBig+=10) {
+				for(int valueMinusGrowth=0; valueMinusGrowth<=200; valueMinusGrowth+=10) {
+					Scenario swr = computeSWR(marketBeta,smallMinusBig,valueMinusGrowth);
+					if(swr!=null && swr.getSwr()>=4.9) {
+						//displays all High SWRs it finds
+						System.out.println(swr+ ", beta:"+marketBeta+", SMB:"+smallMinusBig+", HML:"+valueMinusGrowth);
+					}
+				}
+			}
+		}
 	}
 
 	private static Scenario computeSWR(int marketBeta, int smallMinusBig, int valueMinusGrowth) {
@@ -67,12 +67,15 @@ public class Main {
 		Scenario res = null;
 		boolean portfolioSurvival = true;
 		while(portfolioSurvival) {
+			//System.out.println("SWR:"+swr);
 			List<MaxDD> maxDrawdowns = new ArrayList<>();
-			for(int i=0; i<serie.size()-60*12; i++) {
+			for(int i=0; i<serie.size(); i++) {
+				//System.out.println("Month start:"+serie.get(i).getMonth());
 				MaxDD simulationI = simulation(i,marketBeta/100f,smallMinusBig/100f,valueMinusGrowth/100f,swr);
+				//System.out.println(simulationI);
 				maxDrawdowns.add(simulationI);
 			}
-			portfolioSurvival=lessThanFivePercentEqualOne(maxDrawdowns);
+			portfolioSurvival=zeroDead(maxDrawdowns);
 			if(portfolioSurvival) {
 				res = getScenario(swr,maxDrawdowns);
 				swr+=0.1;
@@ -106,15 +109,25 @@ public class Main {
 		}
 		return counter*1.0/survivalEvents.size()<=0.05;
 	}
+	
+	private static boolean zeroDead(List<MaxDD> survivalEvents) {
+		int counter = 0;
+		for(MaxDD p : survivalEvents) {
+			if(p.getMaxDD()>0.99f) {
+				counter++;
+			}
+		}
+		return counter==0;
+	}
 
 	private static MaxDD simulation(int idMonthStart, float marketBeta, float smallMinusBig,
 			float valueMinusGrowth, float swr) {
 		int idMonthEnd=Math.min(idMonthStart+60*12, serie.size()-1);
 		float portfolioRealValue = 1000000f;
 		float maxPortfolioValue=portfolioRealValue;
-		int idMonthStartMaxDD=0;
-		int idMonthEndMaxDD=0;
-		int recordHigh=0;
+		int idMonthStartMaxDD=idMonthStart;
+		int idMonthEndMaxDD=idMonthStart;
+		int recordHigh=idMonthStart;
 		float maxDD=0;
 		float monthlyRealWithdrawal = swr*portfolioRealValue/100.0f/12.0f;
 		int i = idMonthStart;

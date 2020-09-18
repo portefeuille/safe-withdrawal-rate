@@ -5,6 +5,11 @@ public class MaxDD {
 	private int idMonthEnd;
 	private float maxDD;
 	
+	@Override
+	public String toString() {
+		return "MaxDD [idMonthStart=" + idMonthStart + ", idMonthEnd=" + idMonthEnd + ", maxDD=" + maxDD + "]";
+	}
+
 	public int getIdMonthStart() {
 		return idMonthStart;
 	}
